@@ -5,10 +5,12 @@
             <div class="form-group">
                 <label for="title">Title</label>
                 <input type="text" id="title" v-model="form.title" placeholder="Enter title" />
+                <span v-if="form.errors.title" class="error-message">{{ form.errors.title }}</span>
             </div>
             <div class="form-group">
                 <label for="body">Body</label>
                 <textarea id="body" v-model="form.body" placeholder="Enter body"></textarea>
+                <span v-if="form.errors.body" class="error-message">{{ form.errors.body }}</span>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
@@ -55,12 +57,22 @@ const submit = () => {
 
 // Add a new post
 const addPost = () => {
-    form.post("/posts");
+    form.post("/posts", {
+        onError: (errors) => {
+            // Handle errors here if needed
+            console.log(errors);
+        },
+    });
 };
 
 // Update an existing post
 const updatePost = () => {
-    form.put(`/posts/${props.post.id}`);
+    form.put(`/posts/${props.post.id}`, {
+        onError: (errors) => {
+            // Handle errors here if needed
+            console.log(errors);
+        },
+    });
 };
 </script>
 
@@ -110,6 +122,13 @@ const updatePost = () => {
 .form-group textarea {
     height: 100px;
     resize: vertical;
+}
+
+/* Error message styling */
+.error-message {
+    color: #dc3545;
+    font-size: 0.875em;
+    margin-top: 5px;
 }
 
 /* Button styling */
